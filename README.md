@@ -133,7 +133,7 @@ GitHub Actions runs on every push/PR to `main`: `install → build → lint → 
 ## Remote setup (team lead, once)
 
 ```bash
-git remote add origin git@github.com:<org>/my-shop-monorepo.git
+git remote add origin git@github.com:<org>/camping-shop-monorepo.git
 git push -u origin main
 ```
 

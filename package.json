@@ -1,5 +1,5 @@
 {
-  "name": "my-shop-monorepo",
+  "name": "camping-shop-monorepo",
   "version": "1.0.0",
   "private": true,
   "description": "My Shop indie storefront monorepo (Next.js + NestJS)",
