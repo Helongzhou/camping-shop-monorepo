@@ -8,6 +8,12 @@ export interface ProductDto {
   priceCents: number;
   stock: number;
   currency: Currency;
+  imageUrl: string;
+  category: {
+    id: string;
+    name: string;
+    slug: string;
+  };
   createdAt: string;
   updatedAt: string;
 }

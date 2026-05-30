@@ -14,10 +14,13 @@
     "build": "pnpm --filter @myshop/shared --filter @myshop/db run build && pnpm --parallel --filter \"./apps/*\" build",
     "lint": "pnpm -r --if-present run lint",
     "test": "pnpm -r --if-present run test",
+    "verify": "pnpm build && pnpm lint && pnpm test",
     "db:up": "docker compose up -d postgres",
     "db:down": "docker compose down",
     "db:migrate": "pnpm --filter @myshop/db db:migrate",
-    "db:generate": "pnpm --filter @myshop/db db:generate"
+    "db:generate": "pnpm --filter @myshop/db db:generate",
+    "db:seed": "pnpm --filter @myshop/db db:seed",
+    "plan": "node .agents/bin/grill-me.js"
   },
   "keywords": [],
   "author": "",

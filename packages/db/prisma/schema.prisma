@@ -20,19 +20,68 @@ enum Currency {
   EUR
 }
 
-model Product {
-  id          String   @id @default(cuid())
+model Category {
+  id          String    @id @default(cuid())
   name        String
-  slug        String   @unique
+  slug        String    @unique
   description String
-  priceCents  Int
-  stock       Int      @default(0)
-  currency    Currency @default(USD)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  orderItems  OrderItem[]
+  sortOrder   Int       @default(0)
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([slug])
+}
+
+model Product {
+  id           String               @id @default(cuid())
+  name         String
+  slug         String               @unique
+  description  String
+  priceCents   Int
+  stock        Int                  @default(0)
+  currency     Currency             @default(USD)
+  imageUrl     String
+  categoryId   String
+  category     Category             @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  orderItems   OrderItem[]
+  translations ProductTranslation[]
+
+  @@index([slug])
+  @@index([categoryId])
+}
+
+model SiteSettings {
+  id        String        @id @default("singleton")
+  updatedAt DateTime      @updatedAt
+  contents  SiteContent[]
+}
+
+model SiteContent {
+  id           String       @id @default(cuid())
+  settingsId   String       @default("singleton")
+  settings     SiteSettings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+  locale       String
+  siteName     String
+  announcement String?
+  footerText   String?
+
+  @@unique([settingsId, locale])
+}
+
+/// Reserved for Phase 2 — no read/write logic in MVP Strip 1–2 consumers.
+model ProductTranslation {
+  id          String  @id @default(cuid())
+  productId   String
+  product     Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  locale      String
+  name        String
+  description String
+
+  @@unique([productId, locale])
+  @@index([locale])
 }
 
 model Order {

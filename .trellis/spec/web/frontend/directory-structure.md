@@ -6,39 +6,54 @@
 
 ## Overview
 
-Next.js 15 App Router storefront under `apps/web/`. SEO, Stripe checkout, and Core Web Vitals are first-class concerns.
+Next.js 15 App Router storefront under `apps/web/`. SEO, i18n (`next-intl`), theme (`next-themes`), SiteSettings API, Stripe checkout, and Core Web Vitals are first-class concerns.
 
-Source: `.cursor/rules/nextjs-frontend.mdc`, `.cursor/rules/monorepo.mdc`.
+Source: `.cursor/rules/nextjs-frontend.mdc`, `.trellis/spec/web/frontend/i18n-theme-guidelines.md`.
 
 ---
 
-## Directory Layout
+## Directory Layout (current)
 
 ```
 apps/web/
 ├── src/
+│   ├── middleware.ts
+│   ├── i18n/
+│   │   ├── routing.ts
+│   │   ├── request.ts
+│   │   └── navigation.ts
+│   ├── messages/
+│   │   ├── en.json
+│   │   └── zh.json
+│   ├── lib/
+│   │   ├── settings.ts
+│   │   └── theme-server.ts
+│   ├── components/
+│   │   ├── site-header.tsx
+│   │   ├── announcement-bar.tsx
+│   │   ├── site-footer.tsx
+│   │   ├── locale-switcher.tsx
+│   │   ├── theme-switcher.tsx
+│   │   └── theme-provider.tsx
 │   └── app/
-│       ├── layout.tsx       # Root layout
-│       ├── page.tsx         # Home page
-│       └── globals.css
-├── public/                  # Static assets
-├── next.config.ts
-├── tsconfig.json            # paths: "@/*" → "./src/*"
-└── package.json             # name: @myshop/web
+│       ├── favicon.ico
+│       ├── globals.css
+│       └── [locale]/
+│           ├── layout.tsx
+│           └── page.tsx
+├── public/
+├── next.config.ts             # next-intl plugin
+├── tsconfig.json              # paths: "@/*" → "./src/*"
+└── package.json               # name: @myshop/web
 ```
 
-Planned growth for the indie shop:
+Planned growth:
 
 ```
-apps/web/src/app/
-├── layout.tsx
-├── page.tsx
+apps/web/src/app/[locale]/
 ├── products/
-│   └── [slug]/
-│       └── page.tsx         # Product detail + generateMetadata + JSON-LD
-├── (checkout)/
-│   └── ...
-└── api/                     # Route handlers if needed
+│   └── [slug]/page.tsx        # generateMetadata + JSON-LD
+└── (checkout)/...
 ```
 
 ---
@@ -48,8 +63,9 @@ apps/web/src/app/
 Use `@/` for imports from `src/`:
 
 ```typescript
-import { createProductSchema } from '@myshop/shared';
-import { ProductCard } from '@/components/product-card';
+import { Locale } from '@myshop/shared';
+import { SiteHeader } from '@/components/site-header';
+import { Link } from '@/i18n/navigation';
 ```
 
 ---
@@ -58,25 +74,21 @@ import { ProductCard } from '@/components/product-card';
 
 | Artifact | Pattern |
 |----------|---------|
-| Route segment folder | kebab-case (`products/[slug]`) |
-| Components | PascalCase files in `src/components/` |
+| Route segment folder | `[locale]`, `[slug]` |
+| Components | PascalCase in `src/components/` |
 | Server Components | Default — no `'use client'` unless needed |
-| Client Components | `'use client'` at top; suffix `-client.tsx` optional |
-
----
-
-## Examples
-
-- Home page scaffold: `apps/web/src/app/page.tsx` — uses `<main>`, `next/image` with `priority` on hero logo.
-- Shared validation: import Zod schemas from `@myshop/shared`, not duplicated in web.
+| Client Components | `'use client'` — switchers, theme provider |
+| i18n keys | PascalCase namespaces in JSON (`HomePage`, `ThemeSwitcher`) |
 
 ---
 
 ## Monorepo
 
 ```bash
-pnpm --filter @myshop/web add lucide-react
-pnpm --filter @myshop/web dev    # next dev — port 3000
+pnpm --filter @myshop/web add next-intl
+pnpm --filter @myshop/web dev    # port 3000
 ```
 
 Never install UI dependencies at the monorepo root.
+
+See [i18n & Theme Guidelines](./i18n-theme-guidelines.md) for middleware, cookie, and Settings API rules.

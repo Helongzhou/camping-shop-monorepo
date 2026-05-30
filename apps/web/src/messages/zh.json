@@ -1,0 +1,47 @@
+{
+  "HomePage": {
+    "meta": {
+      "title": "趣巢 — 露营装备",
+      "description": "趣巢（TrailNest）精选优质露营装备，陪你探索户外。所有价格均以美元（USD）显示。"
+    },
+    "title": "欢迎来到趣巢",
+    "subtitle": "为每一次出发备好装备。趣巢精选户外露营好物，献给热爱山野的你。",
+    "ctaPrimary": "立即选购",
+    "ctaSecondary": "了解更多"
+  },
+  "LocaleSwitcher": {
+    "label": "语言",
+    "en": "English",
+    "zh": "中文"
+  },
+  "ThemeSwitcher": {
+    "label": "主题",
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统"
+  },
+  "Catalog": {
+    "navCategories": "分类",
+    "categoriesTitle": "按分类选购",
+    "categoriesSubtitle": "浏览精选露营装备系列，为每一种户外路线做好准备。",
+    "featuredCategories": "按分类选购",
+    "featuredCategoriesSubtitle": "从轻量帐篷到露营厨房，一应俱全。",
+    "featuredProducts": "精选装备",
+    "featuredProductsSubtitle": "经户外实测的推荐好物，随时出发。",
+    "viewAllCategories": "查看全部分类",
+    "productCount": "{count, plural, other {共 # 件商品}}",
+    "breadcrumb": "面包屑导航",
+    "productsInCategory": "{name} 下的商品",
+    "emptyCategory": "该分类暂无商品。",
+    "productImage": "商品图片",
+    "inStock": "有货",
+    "outOfStock": "缺货",
+    "viewCategory": "浏览更多 {name}",
+    "meta": {
+      "categories": {
+        "title": "分类 | 趣巢",
+        "description": "探索趣巢露营分类——帐篷、睡袋、背包与露营厨房装备。"
+      }
+    }
+  }
+}

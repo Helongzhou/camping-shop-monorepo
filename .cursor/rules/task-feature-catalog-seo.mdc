@@ -1,0 +1,12 @@
+---
+description: 编写或修改当前任务 [feature-catalog-seo] 的相关逻辑时自动激活
+globs: "apps/web/**/*, apps/api/**/*, packages/**/*"
+---
+# 🛑 Trellis 强管控：当前分支专属红线
+
+你现在处于 Implement 阶段。你必须以 `@task-feature-catalog-seo.md` 为最高准则，配合全局规范。
+
+## ⚠️ 行为守则
+1. **渲染策略**：当前页面对 SEO 要求为 [true]，必须死守对应的水合防御，写出完美的语义化 HTML。
+2. **数据契约**：数据库变动状态为 [true]。如果生成了新的 DTO，必须在 `packages/shared` 中用 Zod 强校验。
+3. **严禁越界**：严禁编写带有 // TODO 的代码，所有核心链路写完后，必须在终端跑通 pnpm verify。

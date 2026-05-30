@@ -13,6 +13,8 @@ export const createProductSchema = z.object({
   priceCents: z.number().int().nonnegative(),
   stock: z.number().int().nonnegative(),
   currency: z.enum(CURRENCY_VALUES).default(Currency.USD),
+  imageUrl: z.string().min(1).max(2000),
+  categoryId: z.string().min(1),
 });
 
 export const updateProductSchema = createProductSchema.partial();

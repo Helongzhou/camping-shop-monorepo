@@ -14,7 +14,7 @@ DTOs, Zod schemas, and enums consumed by API and web. Populated from `.cursor/ru
 
 | Guide | Description | Status |
 |-------|-------------|--------|
-| [Directory Structure](./directory-structure.md) | enums / schemas / dto | Filled |
+| [Directory Structure](./directory-structure.md) | enums / schemas / dto / locale / theme | Filled |
 | [Database Alignment](./database-guidelines.md) | Cents, enum sync | Filled |
 | [Error Handling](./error-handling.md) | Zod parse patterns | Filled |
 | [Quality Guidelines](./quality-guidelines.md) | Pure TS rules | Filled |
