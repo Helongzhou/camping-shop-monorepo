@@ -6,9 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
@@ -22,23 +20,16 @@ jobs:
       - name: ⬇️ Checkout
         uses: actions/checkout@v4
 
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9.15.9
 
-      - name: ⚡ Cache pnpm store
-        uses: actions/cache@v4
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: ~/.local/share/pnpm/store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          node-version: 24
+          cache: pnpm
 
       - name: 📥 Install dependencies
         run: pnpm install --frozen-lockfile
@@ -46,8 +37,8 @@ jobs:
       - name: ✅ Verify (build + lint + test)
         run: pnpm verify
 
-  build:
-    name: 🎨 Build static storefront
+  deploy:
+    name: 🌐 Build & publish storefront
     needs: verify
     runs-on: ubuntu-latest
     env:
@@ -58,23 +49,16 @@ jobs:
       - name: ⬇️ Checkout
         uses: actions/checkout@v4
 
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9.15.9
 
-      - name: ⚡ Cache pnpm store
-        uses: actions/cache@v4
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: ~/.local/share/pnpm/store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          node-version: 24
+          cache: pnpm
 
       - name: 📥 Install dependencies
         run: pnpm install --frozen-lockfile
@@ -85,19 +69,16 @@ jobs:
       - name: 📄 Static export (Next.js → out/)
         run: pnpm --filter @myshop/web run build:pages
 
-      - name: 📤 Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: apps/web/out
+      - name: 🔍 Verify export artifact
+        run: |
+          test -f apps/web/out/index.html
+          test -d apps/web/out/en
+          test -f apps/web/out/.nojekyll
+          echo "Static export OK — $(find apps/web/out -name 'index.html' | wc -l) HTML files"
 
-  deploy:
-    name: 🌐 Publish GitHub Pages
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: 🚀 Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: 🚀 Push to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./apps/web/out
+          force_orphan: true
