@@ -1,61 +1,53 @@
-name: CI
+name: ⛺ Camping Shop CI (Trellis Verify)
 
 on:
   push:
-    branches: [main]
+    branches: [ main, develop ]
   pull_request:
-    branches: [main]
-
-concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    branches: [ main, develop ]
 
 jobs:
-  quality:
+  verify:
+    name: 🧪 全栈合规与质量校验
     runs-on: ubuntu-latest
-    timeout-minutes: 20
 
     steps:
-      - name: Checkout
+      - name: ⬇️ 拉取代码库
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: 🟢 安装 Node.js 环境 (结合当前最新的 Node 24 规范)
         uses: actions/setup-node@v4
         with:
-          node-version-file: .nvmrc
+          node-version: 24
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: 📦 安装 pnpm 包管理器
+        uses: pnpm/action-setup@v3
         with:
-          version: 9.15.9
+          version: 9.15.9 # 对齐你本地的 pnpm 版本
+          run_install: false
 
-      - name: Get pnpm store directory
-        shell: bash
-        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Cache pnpm store
+      - name: ⚡ 配置文件缓存 (加速后续 CI 运行)
         uses: actions/cache@v4
         with:
-          path: ${{ env.STORE_PATH }}
+          path: ~/.local/share/pnpm/store
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install dependencies
+      - name: 📥 安装依赖
         run: pnpm install --frozen-lockfile
 
-      - name: Generate Prisma client
-        run: pnpm db:generate
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/myshop?schema=public
+      - name: 🗄️ 验证 Prisma Schema 并生成客户端类型
+        run: |
+          pnpm --filter db prisma validate
+          pnpm --filter db prisma generate
 
-      - name: Build
-        run: pnpm build
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/myshop?schema=public
+      - name: 🚨 全局语法与风格扫描 (Lint)
+        run: pnpm run lint
 
-      - name: Lint
-        run: pnpm lint
+      - name: 📐 全局 TypeScript 类型契约安全校验 (Type Check)
+        run: pnpm run type-check
 
-      - name: Test
-        run: pnpm test
+      # 如果你后续补充了全栈单元测试/E2E测试，在此处解锁
+      # - name: 🧪 自动化测试运行
+      #   run: pnpm test

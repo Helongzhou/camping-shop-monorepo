@@ -1,0 +1,8 @@
+{"file": ".trellis/spec/shared/backend/index.md", "reason": "Strip 0: DTO/Zod/enum conventions for @myshop/shared"}
+{"file": ".trellis/spec/shared/backend/directory-structure.md", "reason": "Strip 0: enums/schemas/dto folder layout"}
+{"file": ".trellis/spec/shared/backend/database-guidelines.md", "reason": "Strip 0: Currency enum alignment with SITE_CONFIG"}
+{"file": ".trellis/spec/web/frontend/index.md", "reason": "Strip 3-5: i18n routing and SEO requirements"}
+{"file": ".trellis/spec/web/frontend/component-guidelines.md", "reason": "Strip 5: Header/Footer client-server component split"}
+{"file": ".trellis/spec/api/backend/index.md", "reason": "Strip 2: Settings controller/service layering"}
+{"file": ".trellis/spec/db/backend/index.md", "reason": "Strip 1: SiteSettings schema and migration patterns"}
+{"file": ".trellis/tasks/05-30-global-i18n-theme-foundation/task-stripe-flow.md", "reason": "Authoritative strip order and edge cases from Grill-Me"}

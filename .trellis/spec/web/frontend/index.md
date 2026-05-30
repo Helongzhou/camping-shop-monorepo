@@ -14,7 +14,8 @@ Customer-facing indie shop: SEO, Stripe checkout, Core Web Vitals. Populated fro
 
 | Guide | Description | Status |
 |-------|-------------|--------|
-| [Directory Structure](./directory-structure.md) | App Router layout | Filled |
+| [Directory Structure](./directory-structure.md) | App Router + i18n layout | Filled |
+| [i18n & Theme Guidelines](./i18n-theme-guidelines.md) | next-intl, next-themes, Settings API | Filled |
 | [Component Guidelines](./component-guidelines.md) | Semantic HTML, Image, JSON-LD | Filled |
 | [Hook Guidelines](./hook-guidelines.md) | Server-first data fetching | Filled |
 | [State Management](./state-management.md) | Server vs client state | Filled |

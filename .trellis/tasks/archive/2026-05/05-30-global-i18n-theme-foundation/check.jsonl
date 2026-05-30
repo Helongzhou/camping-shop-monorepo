@@ -1,0 +1,5 @@
+{"file": ".trellis/spec/shared/backend/quality-guidelines.md", "reason": "Verify no any, strict exports in shared package"}
+{"file": ".trellis/spec/web/frontend/quality-guidelines.md", "reason": "Verify i18n params Promise and hydration rules"}
+{"file": ".trellis/spec/api/backend/quality-guidelines.md", "reason": "Verify Settings API error handling"}
+{"file": ".trellis/tasks/05-30-global-i18n-theme-foundation/prd.md", "reason": "Acceptance criteria and out-of-scope guardrails"}
+{"file": ".trellis/tasks/05-30-global-i18n-theme-foundation/task-stripe-flow.md", "reason": "Strip completion checklist and money safety red lines"}
