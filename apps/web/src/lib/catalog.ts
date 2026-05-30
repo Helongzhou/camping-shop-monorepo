@@ -81,6 +81,50 @@ const FALLBACK_PRODUCTS: ProductSummaryDto[] = [
       'https://images.unsplash.com/photo-1682687220063-4742bd7fd538?auto=format&fit=crop&w=1200&q=80',
     category: { name: 'Camp Kitchen', slug: 'camp-kitchen' },
   },
+  {
+    id: 'fallback-tent-3p',
+    name: 'Summit Dome 3P Tent',
+    slug: 'summit-dome-3p',
+    priceCents: 32900,
+    stock: 12,
+    currency: Currency.USD,
+    imageUrl:
+      'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=1200&q=80',
+    category: { name: 'Tents', slug: 'tents' },
+  },
+  {
+    id: 'fallback-pine-bag',
+    name: 'Pine Synthetic 30°F Sleeping Bag',
+    slug: 'pine-synthetic-30-bag',
+    priceCents: 9900,
+    stock: 30,
+    currency: Currency.USD,
+    imageUrl:
+      'https://images.unsplash.com/photo-1473341304170-971ddcc1541e?auto=format&fit=crop&w=1200&q=80',
+    category: { name: 'Sleeping Bags', slug: 'sleeping-bags' },
+  },
+  {
+    id: 'fallback-thru-pack',
+    name: 'Thru Trail 65L Backpack',
+    slug: 'thru-trail-65l',
+    priceCents: 21900,
+    stock: 14,
+    currency: Currency.USD,
+    imageUrl:
+      'https://images.unsplash.com/photo-1622260614153-03223fb72052?auto=format&fit=crop&w=1200&q=80',
+    category: { name: 'Backpacks', slug: 'backpacks' },
+  },
+  {
+    id: 'fallback-coffee',
+    name: 'Trail Brew Coffee Set',
+    slug: 'trail-brew-coffee-set',
+    priceCents: 4500,
+    stock: 35,
+    currency: Currency.USD,
+    imageUrl:
+      'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80',
+    category: { name: 'Camp Kitchen', slug: 'camp-kitchen' },
+  },
 ];
 
 function isCatalogResponse<T>(value: unknown): value is CatalogListResponse<T> {

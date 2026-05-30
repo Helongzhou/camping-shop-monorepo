@@ -7,10 +7,18 @@ import { ProductJsonLd } from '@/components/product-json-ld';
 import { Link } from '@/i18n/navigation';
 import { getCategoryBySlug } from '@/lib/catalog';
 import { buildCanonicalPath, buildLocaleAlternates } from '@/lib/metadata';
+import { STATIC_CATEGORY_SLUGS } from '@/lib/static-catalog-slugs';
+import { routing } from '@/i18n/routing';
 
 type CategoryDetailPageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
+
+export function generateStaticParams() {
+  return routing.locales.flatMap((locale) =>
+    STATIC_CATEGORY_SLUGS.map((slug) => ({ locale, slug })),
+  );
+}
 
 export async function generateMetadata({
   params,

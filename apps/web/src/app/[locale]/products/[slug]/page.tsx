@@ -10,10 +10,18 @@ import { getProductBySlug } from '@/lib/catalog';
 import { buildProductJsonLd, formatUsdPrice } from '@/lib/catalog-seo';
 import { buildCanonicalPath, buildLocaleAlternates } from '@/lib/metadata';
 import { getSiteSettings } from '@/lib/settings';
+import { STATIC_PRODUCT_SLUGS } from '@/lib/static-catalog-slugs';
+import { routing } from '@/i18n/routing';
 
 type ProductDetailPageProps = {
   params: Promise<{ locale: string; slug: string }>;
 };
+
+export function generateStaticParams() {
+  return routing.locales.flatMap((locale) =>
+    STATIC_PRODUCT_SLUGS.map((slug) => ({ locale, slug })),
+  );
+}
 
 export async function generateMetadata({
   params,

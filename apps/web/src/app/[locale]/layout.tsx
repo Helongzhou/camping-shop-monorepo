@@ -1,8 +1,10 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { GeistMono } from 'geist/font/mono';
+import { GeistSans } from 'geist/font/sans';
 import { notFound } from 'next/navigation';
 import { hasLocale } from 'next-intl';
+import type { Metadata } from 'next';
 import { Locale } from '@myshop/shared';
 
 import { AnnouncementBar } from '@/components/announcement-bar';
@@ -16,15 +18,14 @@ import { getServerThemeMode } from '@/lib/theme-server';
 
 import '../globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
+const geistSans = GeistSans;
+const geistMono = GeistMono;
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+};
 
 type LocaleLayoutProps = {
   children: React.ReactNode;
