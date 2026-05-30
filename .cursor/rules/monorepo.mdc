@@ -1,0 +1,25 @@
+---
+description: 贯穿整个 pnpm Monorepo 仓库的全局规范，适用于所有开发会话
+globs: **/*
+alwaysApply: true
+---
+# Monorepo 全局核心准则
+
+## 1. 架构定位
+- `apps/web`: Next.js 全栈前台（面向用户、SEO、Stripe 购买流、静态/动态渲染）。
+- `apps/api`: NestJS 核心后端（面向商家后台、高并发业务、核心状态机、Cron 任务）。
+- `packages/shared`: 纯 TypeScript 共享库。存放 DTO 结构、Zod 校验 Schema 和通用 Enum。
+
+## 2. 依赖管理
+- 安装依赖时，必须明确进入对应子目录或使用 `--filter` 标志。
+- 示例：`pnpm --filter web add lucide-react` 或 `pnpm --filter api add @nestjs/passport`。
+- 严禁将业务包直接安装在 Monorepo 根目录下。
+
+## 3. 全局代码质量
+- 严禁使用 `any`，一律使用严格的 TypeScript 类型。
+- 所有的异步方法必须返回强类型，如 `Promise<UserDto>`，不能留空或由 AI 盲目推导。
+
+## 4. 零占位符（Zero-Placeholder）
+- 禁止 `// TODO`、禁止 `// ... 其余代码保持不变` 式省略。
+- 每次改动须可编译、可运行；新 API/组件须完整实现或明确不引入（不要留空壳）。
+- 若范围过大，应缩小任务并分步交付，而不是交付半成品。

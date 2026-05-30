@@ -1,0 +1,102 @@
+---
+description: 编写或修改 Next.js 15 前端应用及独立站页面时强制触发，严格死守 SEO 与核心网页指标 (Core Web Vitals)
+globs: apps/web/**/*.{ts,tsx}
+alwaysApply: false
+---
+# Next.js 15 全栈独立站 & SEO 核心铁律
+
+## 1. 异步 `params` 与 `searchParams` 标准 (Next.js 15+ 必备)
+- **铁律**：在 Page、Layout、Metadata 以及 Route Handlers 中，`params` 和 `searchParams` 必须作为 `Promise` 处理，使用 `await` 显式解构。严禁直接同步读取。
+- **正确示例**：
+  ```typescript
+  interface PageProps {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+
+  export default async function ProductPage({ params, searchParams }: PageProps) {
+    const { slug } = await params;
+    const { ref } = await searchParams;
+    // 执行服务端数据获取...
+  }
+  ```
+
+## 2. 动态元数据与多语言 SEO (Dynamic Metadata)
+- **所有动态商品页、博客页必须导出 generateMetadata 函数，禁止不写或只写静态标题。**
+- **多语言与 canonical 标签：必须配置 alternates，明确定义主域名与语言变体，防止 Google 判定为重复内容。**
+- **规范模板**：
+```typescript
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
+
+  if (!product) return { title: '商品未找到 - 我的独立站' };
+
+  return {
+    title: `${product.name} | 官方正品跨境直邮`,
+    description: `${product.description.slice(0, 150)}... 立即下单享受全球免邮。`,
+    alternates: {
+      canonical: `https://myshop.com/products/${slug}`,
+      languages: {
+        'en-US': `https://myshop.com/en/products/${slug}`,
+        'zh-CN': `https://myshop.com/zh/products/${slug}`,
+      },
+    },
+    openGraph: {
+      title: product.name,
+      description: product.description,
+      images: [{ url: product.mainImage, width: 1200, height: 630, alt: product.name }],
+      type: 'website',
+    },
+  };
+} 
+```
+
+## 3. 完美语义化 HTML 与结构化数据 (Schema.org)
+- **语义化标签：严禁整篇页面全是 <div>。商品页必须包含 <main>, <article>, <section>, <h1> (每个页面有且仅有一个 h1，通常是商品标题)，按钮必须使用 <button>，链接必须使用 Next.js 的 <Link>。**
+- **结构化 JSON-LD (Rich Snippets)：商品详情页必须注入 Product 类型的 JSON-LD 数据，以便 Google 搜索直接展示价格、库存状态和评分。**
+- **注入示例**：
+```typescript
+export default async function ProductPage({ params }: PageProps) {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    'name': product.name,
+    'image': product.mainImage,
+    'description': product.description,
+    'offers': {
+      '@type': 'Offer',
+      'price': (product.priceCents / 100).toFixed(2),
+      'priceCurrency': 'USD',
+      'availability': product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+    },
+  };
+
+  return (
+    <main className="container">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <article>
+        <h1>{product.name}</h1>
+        {/* 其他商品详情组件 */}
+      </article>
+    </main>
+  );
+}
+```
+## 4. 核心网页指标 (Core Web Vitals) 性能红线
+- **图片优化 (LCP)：所有商品图、Banner 必须使用 Next.js 的 <Image> 组件。首屏可见的大图（如 Hero 轮播图）必须加上 priority 属性，且必须显式配置 width、height 或 sizes，绝对禁止触发 CLS (累计布局偏移)。**
+- **字体与布局：使用 next/font 加载字体，防止加载期间页面字体闪烁 (FOUT)。**
+
+## 5. 防御水合错误 (Hydration Mismatch)
+- **独立站常有“本地时间”、“倒计时”、“随机推荐”等动态数据。在 Server Component 渲染和 Client Component 激活时如果不一致，会导致水合崩溃。**
+- **规矩**:
+ 1. 涉及浏览器特有对象（如 `window`, `localStorage`）、时间戳格式化的逻辑，一律放在客户端组件的 `useEffect` 中延迟加载。
+  2. 严禁在 SSR 阶段直接渲染 `new Date().toLocaleString()`。
+  3. 如果某个第三方小组件不可控，必须使用 `dynamic(() => Promise.resolve(Component), { ssr: false })` 进行禁用服务端渲染包裹。
+

@@ -1,0 +1,10 @@
+---
+description: 当修改或读取 packages/db 目录下的 Prisma 架构时触发
+alwaysApply: false
+globs: packages/db/**/*
+---
+# 独立站数据库规范
+
+- 所有价格、金额、折扣一律在数据库中存储为分（Cents/Integer），严禁使用 Float/Decimal。
+- 每次修改 `schema.prisma` 后，必须在 `packages/db` 目录下自动触发 `pnpm prisma generate`。
+- 涉及到多表写入的业务（如：扣减库存并创建订单），必须使用 `prisma.$transaction` 包裹。
